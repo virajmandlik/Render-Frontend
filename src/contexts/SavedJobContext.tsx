@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from './AuthContext';
+import { API_BASE_URL } from '@/config';
 
 interface SavedJob {
   _id: string;
@@ -32,7 +33,7 @@ export function SavedJobProvider({ children }: { children: React.ReactNode }) {
   const { token } = useAuth();
 
   const api = axios.create({
-    baseURL: '/api',
+    baseURL: API_BASE_URL,
     headers: { Authorization: `Bearer ${token}` },
   });
 

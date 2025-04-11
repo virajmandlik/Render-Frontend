@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from './AuthContext';
+import { API_BASE_URL } from '@/config';
 
 interface Company {
   _id: string;
@@ -37,7 +38,7 @@ export function CompanyProvider({ children }: { children: React.ReactNode }) {
   const createApi = () => {
     const currentToken = localStorage.getItem('token');
     return axios.create({
-      baseURL: process.env.NODE_ENV === 'development' ? 'http://localhost:5000/api' : '/api',
+      baseURL: API_BASE_URL,
       headers: { 
         Authorization: `Bearer ${currentToken}`,
         'Content-Type': 'application/json'

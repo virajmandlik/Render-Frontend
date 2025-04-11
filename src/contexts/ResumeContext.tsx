@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import { Resume } from "@/types";
 import { useAuth } from "./AuthContext";
 import { useToast } from "@/components/ui/use-toast";
+import { API_BASE_URL } from "@/config";
 
 interface ResumeContextType {
   resumes: Resume[];
@@ -13,9 +14,6 @@ interface ResumeContextType {
 }
 
 const ResumeContext = createContext<ResumeContextType | undefined>(undefined);
-
-// API Base URL
-const API_URL = "http://localhost:5000/api";
 
 export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated } = useAuth();
@@ -56,7 +54,7 @@ export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         throw new Error("No authentication token");
       }
 
-      const response = await fetch(`${API_URL}/resumes`, {
+      const response = await fetch(`${API_BASE_URL}/resumes`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -104,7 +102,7 @@ export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       // Convert file to base64
       const fileData = await fileToBase64(file);
 
-      const response = await fetch(`${API_URL}/resumes`, {
+      const response = await fetch(`${API_BASE_URL}/resumes`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -166,7 +164,7 @@ export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         throw new Error("Resume not found");
       }
 
-      const response = await fetch(`${API_URL}/resumes/${id}/download`, {
+      const response = await fetch(`${API_BASE_URL}/resumes/${id}/download`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -218,7 +216,7 @@ export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         throw new Error("Resume not found");
       }
 
-      const response = await fetch(`${API_URL}/resumes/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/resumes/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

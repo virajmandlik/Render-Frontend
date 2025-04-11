@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { User, AuthState } from "@/types";
 import { useToast } from "@/components/ui/use-toast";
+import { API_BASE_URL } from "@/config";
 
 interface AuthContextType extends AuthState {
   login: (email: string, password: string) => Promise<void>;
@@ -10,9 +11,6 @@ interface AuthContextType extends AuthState {
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-// API Base URL
-const API_URL = "http://localhost:5000/api";
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [authState, setAuthState] = useState<AuthState>({
@@ -35,7 +33,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Helper function to get user profile with token
   const getUserProfile = async (token: string) => {
     try {
-      const response = await fetch(`${API_URL}/users/profile`, {
+      const response = await fetch(`${API_BASE_URL}/users/profile`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -61,7 +59,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await fetch(`${API_URL}/users/login`, {
+      const response = await fetch(`${API_BASE_URL}/users/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -106,7 +104,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const register = async (name: string, email: string, password: string) => {
     try {
-      const response = await fetch(`${API_URL}/users`, {
+      const response = await fetch(`${API_BASE_URL}/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -170,7 +168,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         throw new Error("No authentication token");
       }
       
-      const response = await fetch(`${API_URL}/users/profile`, {
+      const response = await fetch(`${API_BASE_URL}/users/profile`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

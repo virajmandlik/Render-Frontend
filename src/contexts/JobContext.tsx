@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { JobApplication, Status } from "@/types";
+import { Job, JobApplication, Status } from "@/types";
 import { useAuth } from "./AuthContext";
 import { useToast } from "@/components/ui/use-toast";
+import { API_BASE_URL } from "@/config";
 
 interface Job {
   id: string;
@@ -34,9 +35,6 @@ interface JobContextType {
 
 const JobContext = createContext<JobContextType | undefined>(undefined);
 
-// API Base URL
-const API_URL = "http://localhost:5000/api";
-
 export const JobProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated } = useAuth();
   const [jobs, setJobs] = useState<JobApplication[]>([]);
@@ -61,7 +59,7 @@ export const JobProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         throw new Error("No authentication token");
       }
 
-      const response = await fetch(`${API_URL}/jobs`, {
+      const response = await fetch(`${API_BASE_URL}/jobs`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -109,7 +107,7 @@ export const JobProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         throw new Error('No authentication token');
       }
 
-      const response = await fetch(`${API_URL}/jobs`, {
+      const response = await fetch(`${API_BASE_URL}/jobs`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -171,7 +169,7 @@ export const JobProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         apiJobData.dateApplied = new Date(apiJobData.dateApplied).toISOString();
       }
 
-      const response = await fetch(`${API_URL}/jobs/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/jobs/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -234,7 +232,7 @@ export const JobProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         throw new Error("Job not found");
       }
 
-      const response = await fetch(`${API_URL}/jobs/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/jobs/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
