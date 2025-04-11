@@ -81,9 +81,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const register = async (name: string, email: string, password: string) => {
     try {
-      console.log("Registering with API URL: https://render-backend-2664.onrender.com/api");
+      console.log("Registering with direct fetch call to: https://render-backend-2664.onrender.com/api/users");
       
-      const data = await authApi.register(name, email, password);
+      // Use a direct fetch call with the hardcoded URL
+      const response = await fetch('https://render-backend-2664.onrender.com/api/users', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ name, email, password })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Registration failed");
+      }
+
+      const data = await response.json();
       
       // Store token in localStorage
       localStorage.setItem("token", data.token);
@@ -104,6 +118,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         description: `Welcome, ${name}!`,
       });
     } catch (error) {
+      console.error("Registration error:", error);
       toast({
         title: "Registration failed",
         description: error instanceof Error ? error.message : "An unknown error occurred",
