@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { User, AuthState } from "@/types";
 import { useToast } from "@/components/ui/use-toast";
-import { API_BASE_URL } from "@/config";
+import { authApi } from "@/api";
 
 interface AuthContextType extends AuthState {
   login: (email: string, password: string) => Promise<void>;
@@ -33,17 +33,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Helper function to get user profile with token
   const getUserProfile = async (token: string) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/users/profile`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to authenticate");
-      }
-
-      const userData = await response.json();
+      const userData = await authApi.getProfile(token);
       
       setAuthState({
         user: userData,
@@ -59,20 +49,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/users/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ email, password })
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Invalid credentials");
-      }
-
-      const data = await response.json();
+      const data = await authApi.login(email, password);
       
       // Store token in localStorage
       localStorage.setItem("token", data.token);
@@ -104,20 +81,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const register = async (name: string, email: string, password: string) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/users`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ name, email, password })
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Registration failed");
-      }
-
-      const data = await response.json();
+      console.log("Registering with API URL: https://render-backend-2664.onrender.com/api");
+      
+      const data = await authApi.register(name, email, password);
       
       // Store token in localStorage
       localStorage.setItem("token", data.token);
@@ -168,21 +134,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         throw new Error("No authentication token");
       }
       
-      const response = await fetch(`${API_BASE_URL}/users/profile`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify(userData)
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to update profile");
-      }
-
-      const data = await response.json();
+      const data = await authApi.updateProfile(token, userData);
       
       // Update token if returned from API
       if (data.token) {
