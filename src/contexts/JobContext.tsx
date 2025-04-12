@@ -59,7 +59,7 @@ export const JobProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         throw new Error("No authentication token");
       }
 
-      const response = await fetch(`${API_BASE_URL}/jobs`, {
+      const response = await fetch(`${API_BASE_URL}/api/jobs`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -107,7 +107,7 @@ export const JobProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         throw new Error('No authentication token');
       }
 
-      const response = await fetch(`${API_BASE_URL}/jobs`, {
+      const response = await fetch(`${API_BASE_URL}/api/jobs`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -169,7 +169,7 @@ export const JobProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         apiJobData.dateApplied = new Date(apiJobData.dateApplied).toISOString();
       }
 
-      const response = await fetch(`${API_BASE_URL}/jobs/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/jobs/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -232,7 +232,7 @@ export const JobProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         throw new Error("Job not found");
       }
 
-      const response = await fetch(`${API_BASE_URL}/jobs/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/jobs/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

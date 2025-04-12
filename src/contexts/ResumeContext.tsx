@@ -54,7 +54,7 @@ export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         throw new Error("No authentication token");
       }
 
-      const response = await fetch(`${API_BASE_URL}/resumes`, {
+      const response = await fetch(`${API_BASE_URL}/api/resumes`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -102,7 +102,7 @@ export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       // Convert file to base64
       const fileData = await fileToBase64(file);
 
-      const response = await fetch(`${API_BASE_URL}/resumes`, {
+      const response = await fetch(`${API_BASE_URL}/api/resumes`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -164,7 +164,7 @@ export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         throw new Error("Resume not found");
       }
 
-      const response = await fetch(`${API_BASE_URL}/resumes/${id}/download`, {
+      const response = await fetch(`${API_BASE_URL}/api/resumes/${id}/download`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -216,7 +216,7 @@ export const ResumeProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         throw new Error("Resume not found");
       }
 
-      const response = await fetch(`${API_BASE_URL}/resumes/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/resumes/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
