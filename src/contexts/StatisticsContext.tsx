@@ -44,7 +44,7 @@ export function StatisticsProvider({ children }: { children: React.ReactNode }) 
   const createApi = () => {
     const currentToken = localStorage.getItem('token');
     return axios.create({
-      baseURL: API_BASE_URL,
+      baseURL: `${API_BASE_URL}/api`,
       headers: { 
         Authorization: `Bearer ${currentToken}`,
         'Content-Type': 'application/json'

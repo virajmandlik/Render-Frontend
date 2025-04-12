@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
 import axios from 'axios';
-import { useAuth } from './AuthContext';
 import { API_BASE_URL } from '@/config';
 
 interface SavedJob {
@@ -30,10 +29,10 @@ export function SavedJobProvider({ children }: { children: React.ReactNode }) {
   const [savedJobs, setSavedJobs] = useState<SavedJob[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { token } = useAuth();
+  const token = localStorage.getItem('token');
 
   const api = axios.create({
-    baseURL: API_BASE_URL,
+    baseURL: `${API_BASE_URL}/api`,
     headers: { Authorization: `Bearer ${token}` },
   });
 

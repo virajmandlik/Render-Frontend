@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
 import axios from 'axios';
-import { useAuth } from './AuthContext';
 import { API_BASE_URL } from '@/config';
 
 interface Company {
@@ -32,13 +31,12 @@ export function CompanyProvider({ children }: { children: React.ReactNode }) {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { token } = useAuth();
 
   // Create API instance with current configuration
   const createApi = () => {
     const currentToken = localStorage.getItem('token');
     return axios.create({
-      baseURL: API_BASE_URL,
+      baseURL: `${API_BASE_URL}/api`,
       headers: { 
         Authorization: `Bearer ${currentToken}`,
         'Content-Type': 'application/json'
